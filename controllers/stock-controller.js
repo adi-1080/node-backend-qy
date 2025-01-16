@@ -100,6 +100,17 @@ const getAnalysisData = async (req, res) => {
     }
 }
 
+const getStockStats = async(req,res) => {
+    const {tickerSymbol,quarters} = req.params;
+    try{
+        const response = await axios.get(`${djangoAPI}/get_stock_stats/${tickerSymbol}/${quarters}`)
+        console.log(response);
+        res.status(200).json(response.data);
+    }catch(error){
+        res.status(500).json({error: error.message});
+    }
+}
+
 export default {
     getBalanceSheet,
     getCashFlow,
@@ -108,5 +119,6 @@ export default {
     getCalendar,
     getNews,
     getProfile,
-    getAnalysisData
+    getAnalysisData,
+    getStockStats
 }
