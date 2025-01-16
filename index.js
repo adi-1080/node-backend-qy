@@ -1,19 +1,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import connectDB from './db/connect-db.js';
+// import connectDB from './db/connect-db.js';
 import dotenv from 'dotenv';
-import passport from 'passport';
-import session from 'express-session';
+// import passport from 'passport';
+// import session from 'express-session';
 import cors from 'cors';
-import configureGoogleStrategy from './config/passport-google.js';
-import googleAuthRoute from './routes/googleAuth-route.js';
-import userRoute from './routes/user-route.js';
-import usercontactRoute from './routes/usercontact-router.js';
-import otpRoute from './routes/otp-router.js';
+// import configureGoogleStrategy from './config/passport-google.js';
+// import googleAuthRoute from './routes/googleAuth-route.js';
+// import userRoute from './routes/user-route.js';
+// import usercontactRoute from './routes/usercontact-router.js';
+// import otpRoute from './routes/otp-router.js';
 import stockRoute from './routes/stock-route.js';
 
 dotenv.config();
-connectDB();
+// connectDB();
 
 const app = express();
 const HOST_NAME = 'localhost';
@@ -31,23 +31,23 @@ app.get('/', (req, res) => {
     }
 });
 
-app.use(session({
-    secret: 'secret',
-    resave: false,
-    saveUninitialized: true,
-}));
+// app.use(session({
+//     secret: 'secret',
+//     resave: false,
+//     saveUninitialized: true,
+// }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 // Configure Google Strategy
-configureGoogleStrategy(passport);
+// configureGoogleStrategy(passport);
 
 // Routes
-app.use(googleAuthRoute);
-app.use('/user', userRoute);
-app.use('/usercontact', usercontactRoute);
-app.use('/otp', otpRoute);
+// app.use(googleAuthRoute);
+// app.use('/user', userRoute);
+// app.use('/usercontact', usercontactRoute);
+// app.use('/otp', otpRoute);
 app.use('/stock', stockRoute);
 
 app.listen(PORT_NO, () => {

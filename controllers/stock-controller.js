@@ -67,10 +67,46 @@ const getCalendar = async (req, res) => {
     }
 }
 
+const getNews = async (req, res) => {
+    const { tickerSymbol } = req.params;
+    try {
+        const response = await axios.get(`${djangoAPI}/get_news/${tickerSymbol}`);
+        console.log(response);
+        res.status(200).json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+const getProfile = async (req, res) => {
+    const { tickerSymbol } = req.params;
+    try {
+        const response = await axios.get(`${djangoAPI}/get_profile/${tickerSymbol}`);
+        console.log(response);
+        res.status(200).json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+const getAnalysisData = async (req, res) => {
+    const { tickerSymbol } = req.params;
+    try {
+        const response = await axios.get(`${djangoAPI}/get_analysis_data/${tickerSymbol}`);
+        console.log(response);
+        res.status(200).json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 export default {
     getBalanceSheet,
     getCashFlow,
     getHistoricalData,
     getSectorAndIndustry,
-    getCalendar
+    getCalendar,
+    getNews,
+    getProfile,
+    getAnalysisData
 }
