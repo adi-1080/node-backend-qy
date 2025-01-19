@@ -55,3 +55,11 @@ After signing in they are redirected to the callback url http://localhost:3000/a
 
 - GET http://localhost:3000/google-logout
 This url logs out the user and redirects to home page i.e. http://localhost:3000/
+
+### OTP Login
+
+- POST send otp to adityagupta9845@gmail.com
+http://localhost:3000/otp/send-otp
+
+- POST verify otp for adityagupta9845@gmail.com
+http://localhost:3000/otp/verify-otp
