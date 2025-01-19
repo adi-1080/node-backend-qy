@@ -28,15 +28,6 @@ const isValidEmail = (email) => {
 const sendOTP = async (req, res) => {
     const { identifier } = req.body; // identifier can be phone or email
 
-    // Check if user is registered
-    const user_exists = await User.findOne({
-        $or: [{ email: identifier }, { phone: identifier }]
-    });
-
-    if (!user_exists) {
-        return res.status(404).json({message: "User is not registered. Please sign up first."});
-    }
-
     //Send OTP via phone number
     if (isValidPhoneNumber(identifier)) {
         let digits = '0123456789'
@@ -57,7 +48,14 @@ const sendOTP = async (req, res) => {
             res.status(500).json({message: "Error sending SMS"});
         }
     }
-    else if (isValidEmail(identifier)) {
+    else if (isValidEmail(identifier)){
+
+        // Check if user is registered
+        const user_exists = await User.findOne({$or: [{ email: identifier }, { phone: identifier }]});
+        if (!user_exists) {
+            return res.status(404).json({message: "User is not registered. Please sign up first."});
+        }
+
         const otp = Math.floor(100000 + Math.random() * 900000);
         otpModel.saveOTP(identifier, otp);
 
