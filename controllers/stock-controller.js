@@ -1,6 +1,8 @@
 import axios from "axios";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const djangoAPI = "http://127.0.0.1:8000/api";
+const djangoAPI = process.env.DJANGO_API;
 
 const getBalanceSheet = async (req, res) => {
   const { tickerSymbol } = req.params;
@@ -87,10 +89,58 @@ const getCalendar = async (req, res) => {
   }
 };
 
+const getStockStats = async(req,res) => {
+  const {tickerSymbol,quarters} = req.params;
+  try{
+    const response = await axios.get(`${djangoAPI}/get_stock_stats/${tickerSymbol}/${quarters}`);
+    console.log(response);
+    res.status(200).json(response.data);
+  }catch(e){
+    res.status(500).json({error: e.message});
+  }
+}
+
+const getAnalysis = async(req,res) => {
+  const {tickerSymbol} = req.params;
+  try{
+    const response = await axios.get(`${djangoAPI}/get_analysis_data/${tickerSymbol}`);
+    console.log(response);
+    res.status(200).json(response.data);
+  }catch(e){
+    res.status(500).json({error: e.message});
+  }
+}
+
+const getNews = async(req,res) => {
+  const {tickerSymbol} = req.params;
+  try{
+    const response = await axios.get(`${djangoAPI}/get_news/${tickerSymbol}`);
+    console.log(response);
+    res.status(200).json(response.data);
+  }catch(e){
+    res.status(500).json({error: e.message});
+  }
+}
+
+const getProfile = async(req,res) => {
+  const {tickerSymbol} = req.params;
+  try{
+    const response = await axios.get(`${djangoAPI}/get_profile/${tickerSymbol}`);
+    console.log(response);
+    res.status(200).json(response.data);
+  }catch(e){
+    res.status(500).json({error: e.message});
+  }
+}
+
 export default {
   getBalanceSheet,
   getCashFlow,
   getHistoricalData,
   getSectorAndIndustry,
   getCalendar,
+  getStockStats,
+  getAnalysis,
+  getNews,
+  getProfile,
 };

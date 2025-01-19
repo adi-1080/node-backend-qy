@@ -8,5 +8,9 @@ router.get('/get_cash_flow/:tickerSymbol', stockController.getCashFlow);
 router.get('/get_historical_data/:tickerSymbol', stockController.getHistoricalData);
 router.get('/get_sector_and_industry/:tickerSymbol', stockController.getSectorAndIndustry);
 router.get('/get_calendar/:tickerSymbol', stockController.getCalendar);
+router.get('/get_stock_stats/:tickerSymbol/:quarters', stockController.getStockStats);
+router.get('/get_analysis/:tickerSymbol', stockController.getAnalysis);
+router.get('/get_news/:tickerSymbol', stockController.getNews);
+router.get('/get_profile/:tickerSymbol', stockController.getProfile);
 
 export default router
