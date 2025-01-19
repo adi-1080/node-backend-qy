@@ -16,6 +16,6 @@ router.get('/auth/google/callback', passport.authenticate('google', { failureRed
 
 router.get('/profile', authmiddleware.passAuthUser, googleAuthController.profile);
 
-router.get('/logout', googleAuthController.logout);
+router.get('/google-logout', googleAuthController.logout);
 
 export default router;

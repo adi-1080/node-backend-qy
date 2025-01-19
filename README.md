@@ -53,5 +53,5 @@ http://localhost:3000/user/login <br>
 After clicking on 'Sign in with google' users goes to the login page of google
 After signing in they are redirected to the callback url http://localhost:3000/auth/google/callback. This url redirects user to their profile i.e. http://localhost:3000/profile
 
-- GET http://localhost:3000/logout
+- GET http://localhost:3000/google-logout
 This url logs out the user and redirects to home page i.e. http://localhost:3000/
