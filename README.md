@@ -58,10 +58,10 @@ This url logs out the user and redirects to home page i.e. http://localhost:3000
 
 ### OTP Login
 
-- POST send otp to adityagupta9845@gmail.com
+- POST send otp to adityagupta9845@gmail.com <br>
 http://localhost:3000/otp/send-otp <br>
 ![image](https://github.com/user-attachments/assets/b5115059-b27c-44d0-a2d3-e9f7ad54b728)
 
-- POST verify otp for adityagupta9845@gmail.com
+- POST verify otp for adityagupta9845@gmail.com <br>
 http://localhost:3000/otp/verify-otp <br>
 ![image](https://github.com/user-attachments/assets/bcbc6106-5e62-4b49-8acd-c904cf942f4d)
