@@ -14,7 +14,7 @@ const otpSchema = new mongoose.Schema({
 });
 
 // TTL index for automatic expiry of OTP (valid for 10 minutes)
-otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 600 });
+otpSchema.index({ createdAt: 1 }, { expireAfterSeconds: 120 });
 
 const OTP = mongoose.model("OTP", otpSchema);
 

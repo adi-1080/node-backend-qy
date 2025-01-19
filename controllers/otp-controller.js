@@ -1,6 +1,7 @@
-import twilio from 'twilio'
-import nodemailer from 'nodemailer'
-import otpModel from '../models/otp-model.js'
+import twilio from 'twilio';
+import nodemailer from 'nodemailer';
+import otpModel from '../models/otp-model.js';
+import User from '../models/user-model.js';
 
 const twilioClient = twilio(
     process.env.TWILIO_ACCOUNT_SID,
@@ -27,12 +28,21 @@ const isValidEmail = (email) => {
 const sendOTP = async (req, res) => {
     const { identifier } = req.body; // identifier can be phone or email
 
+    // Check if user is registered
+    const user_exists = await User.findOne({
+        $or: [{ email: identifier }, { phone: identifier }]
+    });
+
+    if (!user_exists) {
+        return res.status(404).json({message: "User is not registered. Please sign up first."});
+    }
+
     //Send OTP via phone number
     if (isValidPhoneNumber(identifier)) {
         let digits = '0123456789'
-        const OTP = ''
+        let OTP = ''
         for (let i = 0; i < 4; i++) {
-            OTP += digits[Mathfloor(Math.random() * 10)]
+            OTP += digits[Math.floor(Math.random() * 10)]
         }
         otpModel.saveOTP(identifier, OTP);
 
@@ -42,9 +52,9 @@ const sendOTP = async (req, res) => {
                 from: process.env.TWILIO_PHONE_NUMBER,
                 to: identifier,
             });
-            res.status(200).send("OTP sent via SMS");
+            res.status(200).json({message: "OTP sent via SMS"});
         } catch (err) {
-            res.status(500).send("Error sending SMS");
+            res.status(500).json({message: "Error sending SMS"});
         }
     }
     else if (isValidEmail(identifier)) {
@@ -60,12 +70,12 @@ const sendOTP = async (req, res) => {
 
         try {
             await mailTransporter.sendMail(mailOptions);
-            res.status(200).send("OTP sent via Email");
+            res.status(200).json({message: "OTP sent via Email"});
         } catch (err) {
-            res.status(500).send("Error sending Email");
+            res.status(500).json({message: "Error sending Email"});
         }
     } else {
-        res.status(400).send("Invalid identifier (must be phone or email)");
+        res.status(400).json({message: "Invalid identifier (must be phone or email)"});
     }
 }
 
@@ -75,9 +85,9 @@ const verifyOTP = async (req, res) => {
 
     if (isVerified) {
         await otpModel.deleteOTP(identifier); // Delete OTP after successful verification
-        res.status(200).send("OTP verified successfully");
+        res.status(200).json({message: "OTP verified successfully"});
     } else {
-        res.status(400).send("Invalid OTP");
+        res.status(400).json({message: "Invalid OTP"});
     }
 }
 

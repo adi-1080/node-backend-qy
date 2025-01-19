@@ -23,4 +23,13 @@ const authUser = async (req,res,next) => {
     }
 }
 
-export default authUser
+const passAuthUser = (req, res, next) => {
+    console.log(req.user);
+    console.log('passport middleware called');
+    if(!req.isAuthenticated()){  
+        return res.redirect('/');
+    }
+    next();
+};
+
+export default {authUser,passAuthUser}

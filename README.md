@@ -47,3 +47,11 @@ http://localhost:3000/user/register <br>
 http://localhost:3000/user/login <br>
 ![image](https://github.com/user-attachments/assets/7720c419-dead-4ad9-960b-9c6594c62943)
 
+### Google Login
+
+- GET http://localhost:3000/auth/google
+After clicking on 'Sign in with google' users goes to the login page of google
+After signing in they are redirected to the callback url http://localhost:3000/auth/google/callback. This url redirects user to their profile i.e. http://localhost:3000/profile
+
+- GET http://localhost:3000/logout
+This url logs out the user and redirects to home page i.e. http://localhost:3000/

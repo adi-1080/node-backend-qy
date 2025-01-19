@@ -1,32 +1,21 @@
 import express from 'express';
 import passport from 'passport';
+
+import googleAuthController from '../controllers/googleAuth-controller.js';
+import authmiddleware from '../middlewares/user-auth.js';
+
 const router = express.Router();
 
 // router.get('/googlelogin', (req, res) => {
 //     res.send("<a href='/auth/google'>Login with Google</a>");
 // });
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));
 
-router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
-    res.redirect('/profile');
-});
+router.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), googleAuthController.callback);
 
-router.get('/profile', (req, res) => {
-    res.send(`Welcome ${req.user.firstName} ${req.user.lastName}`);
-});
+router.get('/profile', authmiddleware.passAuthUser, googleAuthController.profile);
 
-router.get('/logout', (req, res) => {
-    req.logout((e) => {
-        if (e) {
-            console.log('Error logging out');
-        } else {
-            console.log('Logged out');
-            req.session.destroy(() => {
-                res.redirect('/');
-            });
-        }
-    });
-});
+router.get('/logout', googleAuthController.logout);
 
 export default router;

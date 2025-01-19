@@ -25,7 +25,7 @@ app.use(cors());
 
 app.get('/', (req, res) => {
     try {
-        res.status(200).json({ message: 'GET request made on /' });
+        res.status(200).json({ message: 'Home Page' });
     } catch (e) {
         res.status(500).json({ message: 'Some internal error occurred' });
     }

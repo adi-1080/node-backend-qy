@@ -22,7 +22,7 @@ const configureGoogleStrategy = (passport) => {
                     await user.save();
                 }
 
-                return done(null, user);
+                return done(null, user._id);
             }catch(e){
                 console.error('Error during Google OAuth:', e);
                 return done(e, null);
@@ -30,7 +30,7 @@ const configureGoogleStrategy = (passport) => {
         })
     );
 
-    passport.serializeUser((user, done) => done(null, user));
+    passport.serializeUser((user, done) => done(null, user._id));
     passport.deserializeUser(async (id, done) => {
         try {
             const user = await User.findById(id);
