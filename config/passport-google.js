@@ -1,5 +1,9 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../models/user-model.js';
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const configureGoogleStrategy = (passport) => {
     passport.use(
@@ -22,7 +26,16 @@ const configureGoogleStrategy = (passport) => {
                     await user.save();
                 }
 
-                return done(null, user._id);
+                // Generate a JWT token
+                const token = jwt.sign(
+                    { id: user._id, email: user.email },
+                    process.env.SECRET_KEY, // Your secret key
+                    { expiresIn: '1h' } // Token expiration time
+                );
+
+                console.log({token: token});
+
+                return done(null, { id: user._id, token });
             }catch(e){
                 console.error('Error during Google OAuth:', e);
                 return done(e, null);
@@ -30,7 +43,7 @@ const configureGoogleStrategy = (passport) => {
         })
     );
 
-    passport.serializeUser((user, done) => done(null, user._id));
+    passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser(async (id, done) => {
         try {
             const user = await User.findById(id);

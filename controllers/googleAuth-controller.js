@@ -16,6 +16,21 @@ const logout = (req, res) => {
 
 const callback = (req, res) => {
     console.log('Called auth/google/callback');
+
+    if (req.user && req.user.token) {
+        const token = req.user.token;
+
+        // Store the token in a cookie
+        res.cookie('google_auth_token', token, {
+            httpOnly: true, // Prevent client-side JS from accessing the cookie
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            maxAge: 24 * 60 * 60 * 1000, // 1 day
+        });
+
+        console.log('Token stored in cookie:', token);
+    } else {
+        console.error('Token not found in req.user');
+    }
     res.redirect('/profile');
 }
 
