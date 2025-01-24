@@ -9,6 +9,7 @@ const createUserContact = async (req, res) => {
       organization,
       region,
       industry,
+      helpQuery,
       subscribeToProductUpdates,
       subscribeToEventUpdates,
     } = req.body;
@@ -22,6 +23,7 @@ const createUserContact = async (req, res) => {
       organization,
       region,
       industry,
+      helpQuery,
       subscribeToProductUpdates: subscribeToProductUpdates || false, // Default to false if not provided
       subscribeToEventUpdates: subscribeToEventUpdates || false, // Default to false if not provided
     });
