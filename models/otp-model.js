@@ -10,6 +10,11 @@ const otpSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
+  otp_type: {
+    type: String,
+    enum: ['register','login'],
+    // required: true 
+  },
   createdAt: { type: Date, default: Date.now }
 });
 

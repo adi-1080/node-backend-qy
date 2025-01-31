@@ -2,6 +2,16 @@ import twilio from 'twilio';
 import nodemailer from 'nodemailer';
 import otpModel from '../models/otp-model.js';
 import User from '../models/user-model.js';
+import jwt from 'jsonwebtoken'
+
+const generateOTP = () => {
+    let digits = '0123456789'
+    let OTP = ''
+    for (let i = 0; i < 4; i++){
+        OTP += digits[Math.floor(Math.random() * 10)]
+    }
+    return OTP;
+}
 
 const twilioClient = twilio(
     process.env.TWILIO_ACCOUNT_SID,
@@ -30,11 +40,7 @@ const sendOTP = async (req, res) => {
 
     //Send OTP via phone number
     if (isValidPhoneNumber(identifier)) {
-        let digits = '0123456789'
-        let OTP = ''
-        for (let i = 0; i < 4; i++) {
-            OTP += digits[Math.floor(Math.random() * 10)]
-        }
+        let OTP = generateOTP();
         otpModel.saveOTP(identifier, OTP);
 
         try {
@@ -56,14 +62,14 @@ const sendOTP = async (req, res) => {
             return res.status(404).json({message: "User is not registered. Please sign up first."});
         }
 
-        const otp = Math.floor(100000 + Math.random() * 900000);
-        otpModel.saveOTP(identifier, otp);
+        const OTP = generateOTP();
+        otpModel.saveOTP(identifier, OTP);
 
         const mailOptions = {
             from: process.env.EMAIL,
             to: identifier,
             subject: "Your OTP Code",
-            text: `Your OTP is ${otp}`,
+            text: `Your OTP is ${OTP}`,
         };
 
         try {
@@ -83,7 +89,20 @@ const verifyOTP = async (req, res) => {
 
     if (isVerified) {
         await otpModel.deleteOTP(identifier); // Delete OTP after successful verification
-        res.status(200).json({message: "OTP verified successfully"});
+        
+        const user = await User.findOne({$or: [{ email: identifier }, { phone: identifier }]});
+        if (!user) {
+            return res.status(404).json({message: "User not found."});
+        }
+
+        const token = jwt.sign({userId: user.id, email: user.email},process.env.SECRET_KEY, {expiresIn: '1h'}
+        );
+
+        res.status(200).json({
+            message: "OTP verified successfully",
+            token: token
+        });
+
     } else {
         res.status(400).json({message: "Invalid OTP"});
     }

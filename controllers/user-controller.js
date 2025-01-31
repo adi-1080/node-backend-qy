@@ -28,10 +28,10 @@ const register = async (req, res) => {
             user: savedUser
         });
     } catch (e) {
-        console.error('Error during registration:', err);
+        console.error('Error during registration:', e);
         res.status(500).json({
             message: "Some error occurred",
-            error: e
+            error: e.message,
         });
     }
 }
